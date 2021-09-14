@@ -94,7 +94,7 @@ const App = () => {
     if (!Number.isNaN(parseInt(value))) {
       tempData[row][col] = parseInt(value);
     } else {
-      tempData[row][col] = parseInt(value);
+      tempData[row][col] = 0;
     }
     setData(tempData);
   };
