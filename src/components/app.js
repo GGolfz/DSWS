@@ -143,6 +143,9 @@ const App = () => {
       case "hamming":
         hamming();
         break;
+      case "euclid":
+        euclid();
+        break;
     }
   };
   const smc = () => {
@@ -228,6 +231,23 @@ const App = () => {
     setMax(tempMax);
     setResult(tempResult);
   };
+  const euclid = () => {
+    let tempResult = [];
+    let tempMax = -1;
+    for (let i = 0; i < rowName.length; i++) {
+      let temp = 0;
+      for (let j = 0; j < colName.length; j++) {
+        temp += Math.pow(data[parseInt(target)][j] - data[i][j], 2);
+      }
+      temp = Math.sqrt(temp);
+      tempResult.push(temp);
+      if (target != i && (tempMax == -1 || temp < tempResult[tempMax])) {
+        tempMax = i;
+      }
+    }
+    setMax(tempMax);
+    setResult(tempResult);
+  };
   const handleChangeMethod = (value) => {
     setMethod(value);
   };
@@ -273,6 +293,7 @@ const App = () => {
         <option value="jaccard">Jaccard Coefficient</option>
         <option value="hamming">Hamming Distance</option>
         <option value="manhattan">Manhattan</option>
+        <option value="euclid">Euclidean</option>
       </select>
       <button onClick={handleCompute}>Compute</button>
       {result != null &&
