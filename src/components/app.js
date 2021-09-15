@@ -131,10 +131,19 @@ const App = () => {
   };
   const handleCompute = () => {
     switch (method) {
-      case "manhattan":manhattan();break;
-      case "smc": smc();break;
-      case "jaccard":jaccard();break;
-    } 
+      case "manhattan":
+        manhattan();
+        break;
+      case "smc":
+        smc();
+        break;
+      case "jaccard":
+        jaccard();
+        break;
+      case "hamming":
+        hamming();
+        break;
+    }
   };
   const smc = () => {
     let tempResult = [];
@@ -142,19 +151,19 @@ const App = () => {
     for (let i = 0; i < rowName.length; i++) {
       let temp = 0;
       for (let j = 0; j < colName.length; j++) {
-        if(data[parseInt(target)][j] == data[i][j]) {
-          temp+=1;
+        if (data[parseInt(target)][j] == data[i][j]) {
+          temp += 1;
         }
       }
       temp = temp / colName.length;
       tempResult.push(temp);
-      if ((target != i && tempMax == -1) || temp < tempResult[max]) {
+      if (target != i && (tempMax == -1 || temp > tempResult[tempMax])) {
         tempMax = i;
       }
     }
     setMax(tempMax);
     setResult(tempResult);
-  }
+  };
   const jaccard = () => {
     let tempResult = [];
     let tempMax = -1;
@@ -162,24 +171,47 @@ const App = () => {
       let temp = 0;
       let count = 0;
       for (let j = 0; j < colName.length; j++) {
-        console.log(data[i][j], data[target][j],temp,count)
-        if(!(data[i][j] == 0 && data[parseInt(target)][j] == 0) && data[parseInt(target)][j] == data[i][j]) {
+        if (
+          !(data[i][j] == 0 && data[parseInt(target)][j] == 0) &&
+          data[parseInt(target)][j] == data[i][j]
+        ) {
           temp += 1;
         }
-        if(!(data[i][j] == 0 && data[parseInt(target)][j] == 0)) {
+        if (!(data[i][j] == 0 && data[parseInt(target)][j] == 0)) {
           count += 1;
         }
       }
-      console.log(temp,count)
       temp = temp / count;
       tempResult.push(temp);
-      if ((target != i && tempMax == -1) || temp < tempResult[max]) {
+      if (target != i && (tempMax == -1 || temp > tempResult[tempMax])) {
         tempMax = i;
       }
     }
     setMax(tempMax);
     setResult(tempResult);
-  }
+  };
+  const hamming = () => {
+    let tempResult = [];
+    let tempMin = Number.MAX_SAFE_INTEGER;
+    for (let i = 0; i < rowName.length; i++) {
+      let temp = 0;
+      for (let j = 0; j < colName.length; j++) {
+        if (!(data[parseInt(target)][j] == data[i][j])) {
+          temp += 1;
+        }
+      }
+      tempResult.push(temp);
+      if (
+        target != i && (tempMin == Number.MAX_SAFE_INTEGER ||
+        temp < tempResult[tempMin])
+      ) {
+        tempMin = i;
+        console.log(target,i,tempMin)
+      }
+    }
+    setMax(tempMin);
+    setResult(tempResult);
+  };
   const manhattan = () => {
     let tempResult = [];
     let tempMax = -1;
@@ -189,7 +221,7 @@ const App = () => {
         temp += Math.abs(data[parseInt(target)][j] - data[i][j]);
       }
       tempResult.push(temp);
-      if ((target != i && tempMax == -1) || temp < tempResult[max]) {
+      if (target != i && (tempMax == -1 || temp < tempResult[tempMax])) {
         tempMax = i;
       }
     }
@@ -239,6 +271,7 @@ const App = () => {
         {method == null ? <option value={null}>Select Method</option> : null}
         <option value="smc">Simple Matching</option>
         <option value="jaccard">Jaccard Coefficient</option>
+        <option value="hamming">Hamming Distance</option>
         <option value="manhattan">Manhattan</option>
       </select>
       <button onClick={handleCompute}>Compute</button>
