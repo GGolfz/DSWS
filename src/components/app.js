@@ -37,7 +37,7 @@ const App = () => {
     tempName.push("Name " + (rowName.length + 1));
     let tempData = [];
     data.forEach((e) => tempData.push(e.slice()));
-    tempData.push(Array(col).fill(0));
+    tempData.push(Array(colName.length).fill(0));
     setRowName(tempName);
     setData(tempData);
   };
@@ -202,11 +202,11 @@ const App = () => {
       }
       tempResult.push(temp);
       if (
-        target != i && (tempMin == Number.MAX_SAFE_INTEGER ||
-        temp < tempResult[tempMin])
+        target != i &&
+        (tempMin == Number.MAX_SAFE_INTEGER || temp < tempResult[tempMin])
       ) {
         tempMin = i;
-        console.log(target,i,tempMin)
+        console.log(target, i, tempMin);
       }
     }
     setMax(tempMin);
