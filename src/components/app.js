@@ -13,6 +13,7 @@ const App = () => {
       .map((_, index) => "Name " + (index + 1))
   );
   const [target, setTarget] = useState(null);
+  const [method, setMethod] = useState(null);
   const [data, setData] = useState(Array(row).fill(Array(col).fill(0)));
   const [max, setMax] = useState(-1);
   const [result, setResult] = useState(null);
@@ -128,6 +129,57 @@ const App = () => {
     }
     return arr;
   };
+  const handleCompute = () => {
+    switch (method) {
+      case "manhattan":manhattan();break;
+      case "smc": smc();break;
+      case "jaccard":jaccard();break;
+    } 
+  };
+  const smc = () => {
+    let tempResult = [];
+    let tempMax = -1;
+    for (let i = 0; i < rowName.length; i++) {
+      let temp = 0;
+      for (let j = 0; j < colName.length; j++) {
+        if(data[parseInt(target)][j] == data[i][j]) {
+          temp+=1;
+        }
+      }
+      temp = temp / colName.length;
+      tempResult.push(temp);
+      if ((target != i && tempMax == -1) || temp < tempResult[max]) {
+        tempMax = i;
+      }
+    }
+    setMax(tempMax);
+    setResult(tempResult);
+  }
+  const jaccard = () => {
+    let tempResult = [];
+    let tempMax = -1;
+    for (let i = 0; i < rowName.length; i++) {
+      let temp = 0;
+      let count = 0;
+      for (let j = 0; j < colName.length; j++) {
+        console.log(data[i][j], data[target][j],temp,count)
+        if(!(data[i][j] == 0 && data[parseInt(target)][j] == 0) && data[parseInt(target)][j] == data[i][j]) {
+          temp += 1;
+        }
+        if(!(data[i][j] == 0 && data[parseInt(target)][j] == 0)) {
+          count += 1;
+        }
+      }
+      console.log(temp,count)
+      temp = temp / count;
+      tempResult.push(temp);
+      if ((target != i && tempMax == -1) || temp < tempResult[max]) {
+        tempMax = i;
+      }
+    }
+    setMax(tempMax);
+    setResult(tempResult);
+  }
   const manhattan = () => {
     let tempResult = [];
     let tempMax = -1;
@@ -143,6 +195,9 @@ const App = () => {
     }
     setMax(tempMax);
     setResult(tempResult);
+  };
+  const handleChangeMethod = (value) => {
+    setMethod(value);
   };
   const handleChangeTarget = (value) => {
     setTarget(parseInt(value));
@@ -164,6 +219,10 @@ const App = () => {
       <button onClick={deleteRow}>- row</button>
       <button onClick={addCol}>+ column</button>
       <button onClick={deleteCol}>- column</button> <br />
+      <p>
+        Binary Similarity such as Simple Matching, Jaccard Coefficient, Hamming
+        Distance will consider the number that is not 0 to be 1
+      </p>
       <select
         value={target}
         onChange={(e) => handleChangeTarget(e.target.value)}
@@ -173,7 +232,16 @@ const App = () => {
           <option value={index}>{e}</option>
         ))}
       </select>
-      <button onClick={manhattan}>Manhattan</button>
+      <select
+        value={method}
+        onChange={(e) => handleChangeMethod(e.target.value)}
+      >
+        {method == null ? <option value={null}>Select Method</option> : null}
+        <option value="smc">Simple Matching</option>
+        <option value="jaccard">Jaccard Coefficient</option>
+        <option value="manhattan">Manhattan</option>
+      </select>
+      <button onClick={handleCompute}>Compute</button>
       {result != null &&
         result.map((e, i) => <div>{rowName[i] + ": " + e}</div>)}
       {result != null ? (
