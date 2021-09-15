@@ -297,7 +297,7 @@ const App = () => {
       </select>
       <button onClick={handleCompute}>Compute</button>
       {result != null &&
-        result.map((e, i) => <div>{rowName[i] + ": " + e}</div>)}
+        result.map((e, i) => <div>{rowName[i] + ": " + e.toFixed(2)}</div>)}
       {result != null ? (
         <div>{"The first most similar is " + rowName[max]}</div>
       ) : null}
