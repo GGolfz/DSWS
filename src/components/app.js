@@ -146,6 +146,9 @@ const App = () => {
       case "euclid":
         euclid();
         break;
+      case "cosine":
+        cosine();
+        break;
     }
   };
   const smc = () => {
@@ -248,6 +251,27 @@ const App = () => {
     setMax(tempMax);
     setResult(tempResult);
   };
+  const cosine = () => {
+    let tempResult = [];
+    let tempMax = -1;
+    for (let i = 0; i < rowName.length; i++) {
+      let temp = 0;
+      let a = 0;
+      let b = 0;
+      for (let j = 0; j < colName.length; j++) {
+        temp += parseInt(data[parseInt(target)][j]) * parseInt(data[i][j]);
+        a += Math.pow(parseInt(data[parseInt(target)][j]), 2);
+        b += Math.pow(parseInt(data[i][j]), 2);
+      }
+      temp = temp / (Math.sqrt(a) * Math.sqrt(b));
+      tempResult.push(temp);
+      if (target != i && (tempMax == -1 || temp > tempResult[tempMax])) {
+        tempMax = i;
+      }
+    }
+    setMax(tempMax);
+    setResult(tempResult);
+  };
   const handleChangeMethod = (value) => {
     setMethod(value);
   };
@@ -294,6 +318,7 @@ const App = () => {
         <option value="hamming">Hamming Distance</option>
         <option value="manhattan">Manhattan</option>
         <option value="euclid">Euclidean</option>
+        <option value="cosine">Cosine Similarity</option>
       </select>
       <button onClick={handleCompute}>Compute</button>
       {result != null &&
