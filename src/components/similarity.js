@@ -79,13 +79,11 @@ const Similarity = () => {
     }
   };
   const changeColumnName = (index, value) => {
-    console.log(value);
     let temp = [...colName];
     temp[index] = value;
     setColName(temp);
   };
   const changeRowName = (index, value) => {
-    console.log(value);
     let temp = [...rowName];
     temp[index] = value;
     setRowName(temp);
@@ -213,7 +211,6 @@ const Similarity = () => {
         (tempMin == Number.MAX_SAFE_INTEGER || temp < tempResult[tempMin])
       ) {
         tempMin = i;
-        console.log(target, i, tempMin);
       }
     }
     setMax(tempMin);
@@ -279,11 +276,6 @@ const Similarity = () => {
   const handleChangeTarget = (value) => {
     setTarget(parseInt(value));
   };
-  const showData = () => {
-    console.log(data);
-    console.log(colName);
-    console.log(rowName);
-  };
   return (
     <Fragment>
       <h1>Similarity Calculator</h1>
@@ -291,7 +283,6 @@ const Similarity = () => {
         <tr>{generateHeaderRow()}</tr>
         {generateTableData()}
       </table>
-      <button onClick={showData}>Show Data</button>
       <button onClick={addRow}>+ row</button>
       <button onClick={deleteRow}>- row</button>
       <button onClick={addCol}>+ column</button>
