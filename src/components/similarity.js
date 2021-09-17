@@ -31,7 +31,7 @@ const Similarity = () => {
         </th>
       );
     }
-    return arr.map((e) => e);
+    return arr;
   };
   const addRow = () => {
     let tempName = [...rowName];
