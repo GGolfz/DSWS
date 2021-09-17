@@ -75,7 +75,7 @@ const Similarity = () => {
       setColName(tempName);
       setData(tempData);
     } else {
-      alert("Cannot delete col!");
+      alert("Cannot delete column!");
     }
   };
   const changeColumnName = (index, value) => {

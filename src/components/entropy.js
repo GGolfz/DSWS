@@ -90,7 +90,7 @@ const Entropy = () => {
     setData(tempData);
   };
   const deleteCol = () => {
-    if (colName.length > 1) {
+    if (colName.length > 3) {
       let tempName = [...colName];
       tempName.pop();
       let tempData = [];
@@ -98,7 +98,7 @@ const Entropy = () => {
       setColName(tempName);
       setData(tempData);
     } else {
-      alert("Cannot delete col!");
+      alert("Cannot delete column!");
     }
   };
   const computeEntropy = () => {
