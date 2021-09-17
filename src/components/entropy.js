@@ -1,8 +1,8 @@
 import { Fragment } from "preact";
-import { useEffect, useState } from "preact/hooks";
+import {  useState } from "preact/hooks";
 
 const Entropy = () => {
-  const row = 8;
+  const row = 6;
   const col = 3;
   const [colName, setColName] = useState(
     Array(col)
@@ -29,18 +29,6 @@ const Entropy = () => {
 
     return arr;
   };
-  useEffect(() => {
-    setData([
-      ["Yellow", "Red", "No"],
-      ["Green", "Blue", "Yes"],
-      ["Yellow", "Red", "Yes"],
-      ["Yellow", "Purple", "Yes"],
-      ["Yellow", "Blue", "Yes"],
-      ["Green", "Red", "No"],
-      ["Yellow", "Blue", "Yes"],
-      ["Yellow", "Red", "No"],
-    ]);
-  }, []);
   const changeColumnName = (index, value) => {
     let temp = [...colName];
     temp[index] = value;
