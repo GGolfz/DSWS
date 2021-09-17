@@ -49,7 +49,7 @@ const Normalization = () => {
     for (let i in temp) {
       let tempObj = { ...temp[i] };
       if (minValue == maxValue) {
-        tempObj.minMax = "error: divide by zero";
+        tempObj.minMax = NaN;
       } else {
         tempObj.minMax = (tempObj.val - minValue) / (maxValue - minValue);
       }
@@ -58,6 +58,14 @@ const Normalization = () => {
     }
     setData(temp);
   };
+  const addRow = () => {
+    setData((d) => [...d,{val:0,minMax:0,zScore:0}])
+  }
+  const removeRow = () => {
+    let temp = [...data];
+    temp.pop();
+    setData(temp);
+  }
   return (
     <Fragment>
       <h1>Normalization Calculator</h1>
@@ -85,6 +93,8 @@ const Normalization = () => {
             );
           })}
         </table>
+        <button onClick={addRow}>Add Row</button>
+        <button onClick={removeRow}>Delete Row</button>
         <button onClick={handleCalculate}>Normalize</button>
       </div>
     </Fragment>
