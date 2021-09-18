@@ -2,6 +2,7 @@ import { Fragment } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import Entropy from "./entropy";
 import Normalization from "./normalization";
+import Outlier from "./outlier";
 import Similarity from "./similarity";
 const App = () => {
   return (
@@ -10,6 +11,7 @@ const App = () => {
         <Similarity />
         <Normalization />
         <Entropy />
+        <Outlier/>
       </Fragment>
     </div>
   );
