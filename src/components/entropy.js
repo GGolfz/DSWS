@@ -64,7 +64,7 @@ const Entropy = () => {
     tempName.push("");
     let tempData = [];
     data.forEach((e) => tempData.push(e.slice()));
-    tempData.push(Array(colName.length).fill(0));
+    tempData.push(Array(colName.length).fill(""));
     setRowName(tempName);
     setData(tempData);
   };
@@ -85,7 +85,7 @@ const Entropy = () => {
     let tempName = [...colName];
     tempName.push("Feature " + (colName.length + 1));
     let tempData = [];
-    data.forEach((e) => tempData.push([...e.slice(), 0]));
+    data.forEach((e) => tempData.push([...e.slice(), ""]));
     setColName(tempName);
     setData(tempData);
   };
