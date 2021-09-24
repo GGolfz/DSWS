@@ -7,13 +7,13 @@ import Outlier from "./outlier";
 import Similarity from "./similarity";
 const App = () => {
   return (
-    <div id="app" style={{width:'100vw',height:'100vh',padding:'2rem'}}>
+    <div id="app" style={{ width: "100vw", height: "100vh", padding: "2rem" }}>
       <Fragment>
         <Similarity />
         <Normalization />
         <Entropy />
-        <Naive/>
-        <Outlier/>
+        <Naive />
+        <Outlier />
       </Fragment>
     </div>
   );
