@@ -16,13 +16,13 @@ const App = () => {
   const [app, setApp] = useState(null);
   const [auth, setAuth] = useState(false);
   useEffect(() => {
-
     const FirebaseCredentials = {
       apiKey: process.env.PREACT_APP_FIREBASE_PUBLIC_API_KEY,
       authDomain: process.env.PREACT_APP_FIREBASE_AUTH_DOMAIN,
       projectId: process.env.PREACT_APP_FIREBASE_PROJECT_ID,
     };
     let app = initializeApp(FirebaseCredentials);
+    console.log(FirebaseCredentials);
     setApp(app);
   }, []);
   useEffect(() => {
