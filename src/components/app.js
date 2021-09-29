@@ -22,7 +22,6 @@ const App = () => {
       projectId: process.env.PREACT_APP_FIREBASE_PROJECT_ID,
     };
     let app = initializeApp(FirebaseCredentials);
-    console.log(FirebaseCredentials);
     setApp(app);
   }, []);
   useEffect(() => {
