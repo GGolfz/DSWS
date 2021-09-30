@@ -29,6 +29,21 @@ const Entropy = () => {
 
     return arr;
   };
+  const handleUploadFile = (e) => {
+    if(e.target.files && e.target.files.length > 0 && e.target.files[0]) {
+      let file = e.target.files[0];
+      var reader = new FileReader();
+      reader.addEventListener('load',(e) => {
+        let csvData = e.target.result;
+        csvData = csvData.split('\n');
+        csvData = csvData.map(e=>e.split(','))
+        setRowName(Array(csvData.length - 1).fill(''));
+        setColName(csvData[0])
+        setData(csvData.slice(1,csvData.length))
+      })
+      reader.readAsBinaryString(file);
+    }
+  }
   const changeColumnName = (index, value) => {
     let temp = [...colName];
     temp[index] = value;
@@ -187,6 +202,7 @@ const Entropy = () => {
   return (
     <Fragment>
       <h1>Entropy Calculator</h1>
+      <input type="file" accept=".csv" multiple={false} onChange={handleUploadFile} />
       <div>
         <table>
           <tr>{generateHeaderRow()}</tr>

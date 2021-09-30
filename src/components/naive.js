@@ -206,9 +206,27 @@ const Naive = () => {
     temp.splice(index, 1);
     setConditionList(temp);
   };
+  const handleUploadFile = (e) => {
+    if(e.target.files && e.target.files.length > 0 && e.target.files[0]) {
+      let file = e.target.files[0];
+      var reader = new FileReader();
+      reader.addEventListener('load',(e) => {
+        let csvData = e.target.result;
+        csvData = csvData.split('\n');
+        csvData = csvData.map(e=>e.split(','))
+        setRowName(Array(csvData.length - 1).fill(''));
+        setColName(csvData[0])
+        setData(csvData.slice(1,csvData.length))
+        setCondition(null);
+        setConditionList([])
+      })
+      reader.readAsBinaryString(file);
+    }
+  }
   return (
     <Fragment>
       <h1>Naïve Bayes Calculation</h1>
+      <input type="file" accept=".csv" multiple={false} onChange={handleUploadFile} />
       <div>
         <table>
           <tr>{generateHeaderRow()}</tr>
