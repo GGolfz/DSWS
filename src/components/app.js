@@ -10,7 +10,6 @@ import Naive from "./naive";
 import Normalization from "./normalization";
 import Outlier from "./outlier";
 import Similarity from "./similarity";
-import Distributed from "./distribute";
 const App = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -66,7 +65,6 @@ const App = () => {
         ) : null}
         {auth ? (
           <Fragment>
-            <Distributed/>
             <Similarity />
             <Normalization />
             <Entropy />
