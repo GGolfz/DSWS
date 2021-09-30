@@ -11,9 +11,9 @@ const Outlier = () => {
         let q1 = (n+1)/4;
         let q2 = (n+1)/2;
         let q3 = 3*(n+1)/4;
-        q1= numbers[Math.floor(q1)-1]+(((q1*100)%100)/100)*(numbers[Math.floor(q1)]-numbers[Math.floor(q1)-1]
-        q2= numbers[Math.floor(q2)-1]+(((q2*100)%100)/100)*(numbers[Math.floor(q2)]-numbers[Math.floor(q2)-1]
-        q3= numbers[Math.floor(q3)-1]+(((q3*100)%100)/100)*(numbers[Math.floor(q3)]-numbers[Math.floor(q3)-1]
+        q1= numbers[Math.floor(q1)-1]+(((q1*100)%100)/100)*(numbers[Math.floor(q1)]-numbers[Math.floor(q1)-1])
+        q2= numbers[Math.floor(q2)-1]+(((q2*100)%100)/100)*(numbers[Math.floor(q2)]-numbers[Math.floor(q2)-1])
+        q3= numbers[Math.floor(q3)-1]+(((q3*100)%100)/100)*(numbers[Math.floor(q3)]-numbers[Math.floor(q3)-1])
         let iqr = q3 - q1;
         let lowerbound = q1 - 1.5*iqr;
         let upperbound = q3 + 1.5*iqr;
