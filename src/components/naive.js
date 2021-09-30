@@ -251,9 +251,9 @@ const Naive = () => {
             <Fragment>
               <h2>Result: </h2>
               <h3>
-                Class List: {result.classList} <br />
-                Probability: {result.probability} <br />
-                Prediction Class: {result.predict}{" "}
+                Class List: {JSON.stringify(result.classList)} <br />
+                Probability: {JSON.stringify(result.probability)} <br />
+                Prediction Class: {JSON.stringify(result.predict)}{" "}
               </h3>
             </Fragment>
           ) : null}
