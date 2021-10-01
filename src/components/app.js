@@ -1,10 +1,7 @@
 import { Fragment } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Entropy from "./entropy";
 import Naive from "./naive";
 import Normalization from "./normalization";
@@ -14,6 +11,7 @@ const App = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [app, setApp] = useState(null);
+  const [page, setPage] = useState("similarity");
   const [auth, setAuth] = useState(false);
   useEffect(() => {
     const FirebaseCredentials = {
@@ -25,16 +23,15 @@ const App = () => {
     setApp(app);
   }, []);
   useEffect(() => {
-    if(app!= null) {
+    if (app != null) {
       const auth = getAuth(app);
       auth.onAuthStateChanged((user) => {
-        if(user) {
+        if (user) {
           setAuth(true);
         }
-      })
+      });
     }
-
-  },[app])
+  }, [app]);
   const handleSignIn = () => {
     const auth = getAuth(app);
     signInWithEmailAndPassword(auth, email, password).then((resp) => {
@@ -42,6 +39,22 @@ const App = () => {
         setAuth(true);
       }
     });
+  };
+  const renderItem = () => {
+    switch (page) {
+      case "similarity":
+        return <Similarity />;
+      case "normalization":
+        return <Normalization />;
+      case "entropy":
+        return <Entropy />;
+      case "naive":
+        return <Naive />;
+      case "outlier":
+        return <Outlier />;
+      default:
+        return <Similarity />;
+    }
   };
   return (
     <div id="app" style={{ width: "100vw", height: "100vh", padding: "2rem" }}>
@@ -65,13 +78,68 @@ const App = () => {
         ) : null}
         {auth ? (
           <Fragment>
-            <Similarity />
-            <Normalization />
-            <Entropy />
-            <Naive />
-            <Outlier />
+            <div style={{ display: "flex", flexFlow: "row" }}>
+              <div
+                style={{
+                  padding: "0 2rem",
+                  margin: "0 1rem",
+                  fontWeight: page == "similarity" ? "bold" : "normal",
+                  cursor: "pointer",
+                }}
+                onClick={() => setPage("similarity")}
+              >
+                Similarity
+              </div>
+              <div
+                style={{
+                  padding: "0 2rem",
+                  margin: "0 1rem",
+                  fontWeight: page == "normalization" ? "bold" : "normal",
+                  cursor: "pointer",
+                }}
+                onClick={() => setPage("normalization")}
+              >
+                Normalization
+              </div>
+              <div
+                style={{
+                  padding: "0 2rem",
+                  margin: "0 1rem",
+                  fontWeight: page == "entropy" ? "bold" : "normal",
+                  cursor: "pointer",
+                }}
+                onClick={() => setPage("entropy")}
+              >
+                Entropy
+              </div>
+              <div
+                style={{
+                  padding: "0 2rem",
+                  margin: "0 1rem",
+                  fontWeight: page == "naive" ? "bold" : "normal",
+                  cursor: "pointer",
+                }}
+                onClick={() => setPage("naive")}
+              >
+                Naïve Bayes
+              </div>
+              <div
+                style={{
+                  padding: "0 2rem",
+                  margin: "0 1rem",
+                  fontWeight: page == "outlier" ? "bold" : "normal",
+                  cursor: "pointer",
+                }}
+                onClick={() => setPage("outlier")}
+              >
+                Outlier
+              </div>
+            </div>
+            {renderItem()}
           </Fragment>
-        ) : (<div>Please Login to your account</div>)}
+        ) : (
+          <div>Please Login to your account</div>
+        )}
       </Fragment>
     </div>
   );
