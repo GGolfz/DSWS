@@ -18,6 +18,7 @@ const Similarity = () => {
   const [data, setData] = useState(Array(row).fill(Array(col).fill(0)));
   const [max, setMax] = useState(-1);
   const [result, setResult] = useState(null);
+  const [description, setDescription] = useState([]);
   const generateHeaderRow = () => {
     let arr = [<th></th>];
     for (let i = 0; i < colName.length; i++) {
@@ -153,20 +154,30 @@ const Similarity = () => {
   const smc = () => {
     let tempResult = [];
     let tempMax = -1;
+    let descList = [];
     for (let i = 0; i < rowName.length; i++) {
-      let temp = 0;
+      let desc = '';
+      let temp = [0,0];
       for (let j = 0; j < colName.length; j++) {
         if (data[parseInt(target)][j] == data[i][j]) {
-          temp += 1;
+          if(data[i][j] == 0) {
+            temp[0] += 1;
+          } else {
+            temp[1] += 1;
+          }
         }
       }
-      temp = temp / colName.length;
+      desc += rowName[i] + ": (" + temp[0]+"+"+temp[1] + ")/" + colName.length + " = " + (temp[0]+temp[1])+"/"+colName.length;
+      temp = (temp[0]+temp[1]) / colName.length;
+      desc += " = "+temp ;
+      descList.push(desc);
       tempResult.push(temp);
       if (target != i && (tempMax == -1 || temp > tempResult[tempMax])) {
         tempMax = i;
       }
     }
     setMax(tempMax);
+    setDescription(descList);
     setResult(tempResult);
   };
   const jaccard = () => {
@@ -193,6 +204,7 @@ const Similarity = () => {
       }
     }
     setMax(tempMax);
+    setDescription([]);
     setResult(tempResult);
   };
   const hamming = () => {
@@ -214,6 +226,7 @@ const Similarity = () => {
       }
     }
     setMax(tempMin);
+    setDescription([]);
     setResult(tempResult);
   };
   const manhattan = () => {
@@ -230,6 +243,7 @@ const Similarity = () => {
       }
     }
     setMax(tempMax);
+    setDescription([]);
     setResult(tempResult);
   };
   const euclid = () => {
@@ -247,6 +261,7 @@ const Similarity = () => {
       }
     }
     setMax(tempMax);
+    setDescription([]);
     setResult(tempResult);
   };
   const cosine = () => {
@@ -268,6 +283,7 @@ const Similarity = () => {
       }
     }
     setMax(tempMax);
+    setDescription([]);
     setResult(tempResult);
   };
   const handleChangeMethod = (value) => {
@@ -316,7 +332,7 @@ const Similarity = () => {
       {result != null &&
         result.map((e, i) => <div>{rowName[i] + ": " + e.toFixed(2)}</div>)}
       {result != null ? (
-        <div>{"The first most similar is " + rowName[max]}</div>
+        <div>{"The first most similar is " + rowName[max]}<br/>{description.map(e=><div>{e}</div>)}</div>
       ) : null}
     </Fragment>
   );
