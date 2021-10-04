@@ -140,7 +140,7 @@ const App = () => {
         ) : (
           <div>Please Login to your account</div>
         )}
-        <img src="https://tmp.cscms.me/9nwmgr" alt="porju" />
+        <img src="https://tmp.cscms.me/9nwmgr" alt="porju" width="240px" />
       </Fragment>
     </div>
   );
