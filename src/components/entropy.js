@@ -199,6 +199,19 @@ const Entropy = () => {
     }
     return render;
   };
+  const compaction = () => {
+    const tempData = [...data]
+    const tempName = [...rowName];
+    for (let i = 0; i < tempData.length; i++) {
+      if (tempData[i].every(el => el == "")) {
+        tempData.splice(i, 1);
+        tempName.pop()
+        i--;
+      }
+    }
+    setData(tempData);
+    setRowName(tempName);
+  };
   return (
     <Fragment>
       <h1>Entropy Calculator</h1>
@@ -212,6 +225,7 @@ const Entropy = () => {
         <button onClick={deleteRow}>- row</button>
         <button onClick={addCol}>+ column</button>
         <button onClick={deleteCol}>- column</button> <br />
+        <button onClick={compaction}>Compaction</button>
         <button onClick={computeEntropy}>Compute Entropy</button>
         {result ? (
           <div>
