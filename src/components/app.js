@@ -13,7 +13,7 @@ const App = () => {
   const [password, setPassword] = useState("");
   const [app, setApp] = useState(null);
   const [page, setPage] = useState("similarity");
-  const [auth, setAuth] = useState(true);
+  const [auth, setAuth] = useState(false);
   useEffect(() => {
     const FirebaseCredentials = {
       apiKey: process.env.PREACT_APP_FIREBASE_PUBLIC_API_KEY,
