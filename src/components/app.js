@@ -155,7 +155,12 @@ const App = () => {
           <div>Please Login to your account</div>
         )}
         <br/>
+        <div style={{display:'flex'}}>
+        <div style={{padding: '2rem'}}>
         <img src="https://tmp.cscms.me/9nwmgr" alt="porju" width="240px" />
+        </div>
+        <div style={{padding: '2rem'}}>
+        <img src="https://tmp.cscms.me/stamp" alt="stamp" width="240px" /></div></div>
       </Fragment>
     </div>
   );
