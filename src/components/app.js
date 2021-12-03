@@ -7,12 +7,13 @@ import Naive from "./naive";
 import Normalization from "./normalization";
 import Outlier from "./outlier";
 import Similarity from "./similarity";
+import Association from "./association";
 const App = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [app, setApp] = useState(null);
   const [page, setPage] = useState("similarity");
-  const [auth, setAuth] = useState(false);
+  const [auth, setAuth] = useState(true);
   useEffect(() => {
     const FirebaseCredentials = {
       apiKey: process.env.PREACT_APP_FIREBASE_PUBLIC_API_KEY,
@@ -52,6 +53,8 @@ const App = () => {
         return <Naive />;
       case "outlier":
         return <Outlier />;
+      case "association":
+        return <Association />;
       default:
         return <Similarity />;
     }
@@ -133,6 +136,17 @@ const App = () => {
                 onClick={() => setPage("outlier")}
               >
                 Outlier
+              </div>
+              <div
+                style={{
+                  padding: "0 2rem",
+                  margin: "0 1rem",
+                  fontWeight: page == "association" ? "bold" : "normal",
+                  cursor: "pointer",
+                }}
+                onClick={() => setPage("association")}
+              >
+                Association
               </div>
             </div>
             {renderItem()}

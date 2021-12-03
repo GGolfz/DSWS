@@ -92,8 +92,8 @@ const Similarity = () => {
   const changeData = (row, col, value) => {
     let tempData = [];
     data.forEach((e) => tempData.push(e.slice()));
-    if (!Number.isNaN(parseInt(value))) {
-      tempData[row][col] = parseInt(value);
+    if (!Number.isNaN(parseFloat(value))) {
+      tempData[row][col] = parseFloat(value);
     } else {
       tempData[row][col] = 0;
     }
@@ -272,9 +272,9 @@ const Similarity = () => {
       let a = 0;
       let b = 0;
       for (let j = 0; j < colName.length; j++) {
-        temp += parseInt(data[parseInt(target)][j]) * parseInt(data[i][j]);
-        a += Math.pow(parseInt(data[parseInt(target)][j]), 2);
-        b += Math.pow(parseInt(data[i][j]), 2);
+        temp += parseFloat(data[parseInt(target)][j]) * parseFloat(data[i][j]);
+        a += Math.pow(parseFloat(data[parseInt(target)][j]), 2);
+        b += Math.pow(parseFloat(data[i][j]), 2);
       }
       temp = temp / (Math.sqrt(a) * Math.sqrt(b));
       tempResult.push(temp);
