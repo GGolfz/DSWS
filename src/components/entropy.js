@@ -155,6 +155,7 @@ const Entropy = () => {
         ] += 1;
       }
       let entropyFeature = 0;
+      let splitInfo = 0;
       for (let k in featureOutputCount["data"]) {
         let entropyFeatureBranch = 0;
         for (let l in featureOutputCount["data"][k]["data"]) {
@@ -169,9 +170,16 @@ const Entropy = () => {
         entropyFeature +=
           (featureOutputCount["data"][k].sum / featureOutputCount.sum) *
           entropyFeatureBranch;
+          let p1 = featureOutputCount["data"][k].sum / featureOutputCount.sum
+          splitInfo+= p1 * Math.log2(p1);
+      }
+      if(splitInfo < 0) {
+        splitInfo = -1 * splitInfo;
       }
       entropyData[colName[i]]["entropy"] = entropyFeature;
       entropyData[colName[i]]["ig"] = originalEntropy - entropyFeature;
+      entropyData[colName[i]]["splitInfo"] = splitInfo;
+      entropyData[colName[i]]["gainRatio"] = entropyData[colName[i]]["ig"] / splitInfo;
     }
     setResult({
       originalEntropy,
@@ -193,6 +201,8 @@ const Entropy = () => {
             <li>Entropy: {result.entropyData[i].entropy}</li>
             <li>IG: {result.entropyData[i].ig}</li>
             <li>Branch Entropy: {JSON.stringify(result.entropyData[i].branch)}</li>
+            <li>Split Info: {result.entropyData[i].splitInfo}</li>
+            <li>Gain Ratio: {result.entropyData[i].gainRatio}</li>
           </ul>{" "}
         </div>
       );
