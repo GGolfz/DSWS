@@ -188,18 +188,16 @@ const Entropy = () => {
           entropyFeatureBranch;
         let p1 = featureOutputCount["data"][k].sum / featureOutputCount.sum;
         splitInfo += p1 * Math.log2(p1);
-        console.log(
-          k,
-          featureGiniD1,
-          featureGiniD2,
-          featureGiniD1 + featureGiniD2
-        );
         featureGiniD1 *=
           featureOutputCount["data"][k].sum / featureOutputCount.sum;
         featureGiniD2 *=
           (featureOutputCount.sum - featureOutputCount["data"][k].sum) /
           featureOutputCount.sum;
-        entropyData[colName[i]]["gini"][k] = featureGiniD1 + featureGiniD2;
+
+        entropyData[colName[i]]["gini"][k] = {
+          gini: featureGiniD1 + featureGiniD2,
+          reduction: originalGini - (featureGiniD1 + featureGiniD2),
+        };
       }
       if (splitInfo < 0) {
         splitInfo = -1 * splitInfo;
@@ -221,6 +219,8 @@ const Entropy = () => {
     render.push(
       <div>
         <b>Original Entropy: {result.originalEntropy} </b>
+        <br />
+        <b>Original Gini: {result.originalGini} </b>
       </div>
     );
     for (let i in result.entropyData) {
@@ -240,8 +240,24 @@ const Entropy = () => {
               {Object.keys(result.entropyData[i].gini).length == 2
                 ? result.entropyData[i].gini[
                     Object.keys(result.entropyData[i].gini)[0]
-                  ]
-                : JSON.stringify(result.entropyData[i].gini)}
+                  ].gini
+                : JSON.stringify(
+                    Object.keys(result.entropyData[i].gini).map((key) => ({
+                      [key]: result.entropyData[i].gini[key].gini,
+                    }))
+                  )}
+            </li>
+            <li>
+              Reduction in Impurity:{" "}
+              {Object.keys(result.entropyData[i].gini).length == 2
+                ? result.entropyData[i].gini[
+                    Object.keys(result.entropyData[i].gini)[0]
+                  ].reduction
+                : JSON.stringify(
+                    Object.keys(result.entropyData[i].gini).map((key) => ({
+                      [key]: result.entropyData[i].gini[key].reduction,
+                    }))
+                  )}
             </li>
           </ul>{" "}
         </div>
