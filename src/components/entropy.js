@@ -1,5 +1,5 @@
 import { Fragment } from "preact";
-import {  useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 
 const Entropy = () => {
   const row = 6;
@@ -30,20 +30,20 @@ const Entropy = () => {
     return arr;
   };
   const handleUploadFile = (e) => {
-    if(e.target.files && e.target.files.length > 0 && e.target.files[0]) {
+    if (e.target.files && e.target.files.length > 0 && e.target.files[0]) {
       let file = e.target.files[0];
       var reader = new FileReader();
-      reader.addEventListener('load',(e) => {
+      reader.addEventListener("load", (e) => {
         let csvData = e.target.result;
-        csvData = csvData.split('\n');
-        csvData = csvData.map(e=>e.split(','))
-        setRowName(Array(csvData.length - 1).fill(''));
-        setColName(csvData[0])
-        setData(csvData.slice(1,csvData.length))
-      })
+        csvData = csvData.split("\n");
+        csvData = csvData.map((e) => e.split(","));
+        setRowName(Array(csvData.length - 1).fill(""));
+        setColName(csvData[0]);
+        setData(csvData.slice(1, csvData.length));
+      });
       reader.readAsBinaryString(file);
     }
-  }
+  };
   const changeColumnName = (index, value) => {
     let temp = [...colName];
     temp[index] = value;
@@ -118,6 +118,7 @@ const Entropy = () => {
   };
   const computeEntropy = () => {
     let originalEntropy = 0;
+    let originalGini = 1;
     let outputCount = {};
     for (let i of data) {
       if (!(i[i.length - 1] in outputCount)) {
@@ -128,12 +129,13 @@ const Entropy = () => {
     for (let i in outputCount) {
       let p = outputCount[i] / data.length;
       originalEntropy += p * Math.log2(p);
+      originalGini -= p * p;
     }
     if (originalEntropy < 0) originalEntropy = -1 * originalEntropy;
     let entropyData = {};
     for (let i = 0; i < colName.length - 1; i++) {
       let featureOutputCount = { sum: 0, data: {} };
-      entropyData[colName[i]] = { branch: {}, entropy: 0, ig: 0 };
+      entropyData[colName[i]] = { branch: {}, gini: {}, entropy: 0, ig: 0 };
       for (let j = 0; j < data.length; j++) {
         if (!(data[j][i] in featureOutputCount["data"])) {
           featureOutputCount["data"][data[j][i]] = { sum: 0, data: {} };
@@ -158,11 +160,25 @@ const Entropy = () => {
       let splitInfo = 0;
       for (let k in featureOutputCount["data"]) {
         let entropyFeatureBranch = 0;
-        for (let l in featureOutputCount["data"][k]["data"]) {
-          let p =
-            featureOutputCount["data"][k]["data"][l] /
-            featureOutputCount["data"][k].sum;
-          entropyFeatureBranch += p * Math.log2(p);
+        let featureGiniD1 = 1;
+        let featureGiniD2 = 1;
+        for (let l in outputCount) {
+          if (l in featureOutputCount["data"][k]["data"]) {
+            let p =
+              featureOutputCount["data"][k]["data"][l] /
+              featureOutputCount["data"][k].sum;
+            entropyFeatureBranch += p * Math.log2(p);
+            featureGiniD1 -= p * p;
+            let p2 =
+              (outputCount[l] - featureOutputCount["data"][k]["data"][l]) /
+              (featureOutputCount.sum - featureOutputCount["data"][k].sum);
+            featureGiniD2 -= p2 * p2;
+          } else {
+            let p2 =
+              outputCount[l] /
+              (featureOutputCount.sum - featureOutputCount["data"][k].sum);
+            featureGiniD2 -= p2 * p2;
+          }
         }
         if (entropyFeatureBranch < 0)
           entropyFeatureBranch = -1 * entropyFeatureBranch;
@@ -170,19 +186,33 @@ const Entropy = () => {
         entropyFeature +=
           (featureOutputCount["data"][k].sum / featureOutputCount.sum) *
           entropyFeatureBranch;
-          let p1 = featureOutputCount["data"][k].sum / featureOutputCount.sum
-          splitInfo+= p1 * Math.log2(p1);
+        let p1 = featureOutputCount["data"][k].sum / featureOutputCount.sum;
+        splitInfo += p1 * Math.log2(p1);
+        console.log(
+          k,
+          featureGiniD1,
+          featureGiniD2,
+          featureGiniD1 + featureGiniD2
+        );
+        featureGiniD1 *=
+          featureOutputCount["data"][k].sum / featureOutputCount.sum;
+        featureGiniD2 *=
+          (featureOutputCount.sum - featureOutputCount["data"][k].sum) /
+          featureOutputCount.sum;
+        entropyData[colName[i]]["gini"][k] = featureGiniD1 + featureGiniD2;
       }
-      if(splitInfo < 0) {
+      if (splitInfo < 0) {
         splitInfo = -1 * splitInfo;
       }
       entropyData[colName[i]]["entropy"] = entropyFeature;
       entropyData[colName[i]]["ig"] = originalEntropy - entropyFeature;
       entropyData[colName[i]]["splitInfo"] = splitInfo;
-      entropyData[colName[i]]["gainRatio"] = entropyData[colName[i]]["ig"] / splitInfo;
+      entropyData[colName[i]]["gainRatio"] =
+        entropyData[colName[i]]["ig"] / splitInfo;
     }
     setResult({
       originalEntropy,
+      originalGini,
       entropyData,
     });
   };
@@ -200,9 +230,19 @@ const Entropy = () => {
           <ul>
             <li>Entropy: {result.entropyData[i].entropy}</li>
             <li>IG: {result.entropyData[i].ig}</li>
-            <li>Branch Entropy: {JSON.stringify(result.entropyData[i].branch)}</li>
+            <li>
+              Branch Entropy: {JSON.stringify(result.entropyData[i].branch)}
+            </li>
             <li>Split Info: {result.entropyData[i].splitInfo}</li>
             <li>Gain Ratio: {result.entropyData[i].gainRatio}</li>
+            <li>
+              Gini:{" "}
+              {Object.keys(result.entropyData[i].gini).length == 2
+                ? result.entropyData[i].gini[
+                    Object.keys(result.entropyData[i].gini)[0]
+                  ]
+                : JSON.stringify(result.entropyData[i].gini)}
+            </li>
           </ul>{" "}
         </div>
       );
@@ -210,12 +250,12 @@ const Entropy = () => {
     return render;
   };
   const compaction = () => {
-    const tempData = [...data]
+    const tempData = [...data];
     const tempName = [...rowName];
     for (let i = 0; i < tempData.length; i++) {
-      if (tempData[i].every(el => el == "")) {
+      if (tempData[i].every((el) => el == "")) {
         tempData.splice(i, 1);
-        tempName.pop()
+        tempName.pop();
         i--;
       }
     }
@@ -225,7 +265,12 @@ const Entropy = () => {
   return (
     <Fragment>
       <h1>Entropy Calculator</h1>
-      <input type="file" accept=".csv" multiple={false} onChange={handleUploadFile} />
+      <input
+        type="file"
+        accept=".csv"
+        multiple={false}
+        onChange={handleUploadFile}
+      />
       <div>
         <table>
           <tr>{generateHeaderRow()}</tr>
