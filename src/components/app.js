@@ -7,7 +7,7 @@ import Naive from "./naive";
 import Normalization from "./normalization";
 import Outlier from "./outlier";
 import Similarity from "./similarity";
-import Association from "./association";
+import Prism from "./prism";
 const App = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,8 +53,8 @@ const App = () => {
         return <Naive />;
       case "outlier":
         return <Outlier />;
-      case "association":
-        return <Association />;
+      case "prism":
+        return <Prism />;
       default:
         return <Similarity />;
     }
@@ -141,12 +141,12 @@ const App = () => {
                 style={{
                   padding: "0 2rem",
                   margin: "0 1rem",
-                  fontWeight: page == "association" ? "bold" : "normal",
+                  fontWeight: page == "prism" ? "bold" : "normal",
                   cursor: "pointer",
                 }}
-                onClick={() => setPage("association")}
+                onClick={() => setPage("prism")}
               >
-                Association
+                PRISM
               </div>
             </div>
             {renderItem()}
