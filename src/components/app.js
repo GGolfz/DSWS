@@ -8,6 +8,7 @@ import Normalization from "./normalization";
 import Outlier from "./outlier";
 import Similarity from "./similarity";
 import Prism from "./prism";
+import Association from './association';
 const App = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,6 +56,8 @@ const App = () => {
         return <Outlier />;
       case "prism":
         return <Prism />;
+      case "association":
+        return <Association />;
       default:
         return <Similarity />;
     }
@@ -147,6 +150,17 @@ const App = () => {
                 onClick={() => setPage("prism")}
               >
                 PRISM
+              </div>
+              <div
+                style={{
+                  padding: "0 2rem",
+                  margin: "0 1rem",
+                  fontWeight: page == "association" ? "bold" : "normal",
+                  cursor: "pointer",
+                }}
+                onClick={() => setPage("association")}
+              >
+                Association
               </div>
             </div>
             {renderItem()}
