@@ -129,6 +129,7 @@ const Association = () => {
   return (
     <Fragment>
       <h1>Association Calculator</h1>
+      <p>Input items in term of `item1,item2,item3,item4` (separate by comma)</p>
       <div>
         <table>
           <tr>
